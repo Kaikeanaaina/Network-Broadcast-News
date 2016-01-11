@@ -24,20 +24,32 @@ function connect(client){
   });
 
 
-  if(clientManager.length===2){
-    clientManager[0].on('data',function(data){
-      clientManager[1].write(address.address+":"+client.remotePort+": "+data.toString());
-    });
+  client.on('data',function(data){
+    for(var j=0 ; j< clientManager.length ; j++){
+      if(client!==clientManager[j]){
+        clientManager[j].write(address.address+":"+client.remotePort+": "+data.toString());
+      }
+    }
+  });
 
-    clientManager[1].on('data', function(data){
-      clientManager[0].write(address.address+":"+client.remotePort+": "+data.toString());
-    });
-  }
+  // client.on('data',function(data){
+  //   //for(var j=0 ; j< clientManager ; j++){
+  //     clientManager[0].write(address.address+":"+client.remotePort+": "+data.toString());
+  //   //}
+  // });
+
+  //   client.on('data',function(data){
+  //   //for(var j=0 ; j< clientManager ; j++){
+  //     clientManager[1].write(address.address+":"+client.remotePort+": "+data.toString());
+  //   //}
+  // });
+
 
   client.on('end', function(){
     console.log('CLOSED: '+address.address+":"+client.remotePort);
     for(var i = 0;i<clientManager.length;i++){
       console.log(client.remotePort);
+
 
       if(clientManager[i]===client){
 
@@ -45,7 +57,9 @@ function connect(client){
         console.log('this is the amount '+ clientManager.length);
 
       }
+
     }
+
 
   });
 
