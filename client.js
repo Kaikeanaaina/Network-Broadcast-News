@@ -9,6 +9,7 @@ var client = net.connect({port:6969,host:'localhost'}, function(){
 
 
   process.stdin.on('data', function(data){
+    console.log('you said '+ data);
     client.write(data);
   });
 
